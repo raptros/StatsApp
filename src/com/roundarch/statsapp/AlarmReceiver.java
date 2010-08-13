@@ -12,8 +12,8 @@ public class AlarmReceiver extends BroadcastReceiver
     @Override public void onReceive(Context context, Intent intent)
     {
         Log.d(TAG, "received intent, launching UpdaterService");
-        //Resources res = context.getResources();
-        //String action = res.getString(R.string.launch_updater_service);
-        context.startService(new Intent(context, UpdaterService.class));
+        Resources res = context.getResources();
+        String action = res.getString(R.string.launch_updater_service);
+        context.startService(new Intent(action));
     }
 }

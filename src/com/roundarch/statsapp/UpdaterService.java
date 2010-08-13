@@ -70,6 +70,8 @@ public class UpdaterService extends IntentService
 
     @Override public void onHandleIntent(Intent intent)
     {
+        //should probably foreground this service at this point, so there's
+        //a notification that it is updating. TODO.
         Log.d(TAG, "update intent received");
         //bind SetupService to ask it for the api conns.
         boolean bound = bindService(new Intent(this, SetupService.class), sConn, BIND_AUTO_CREATE);

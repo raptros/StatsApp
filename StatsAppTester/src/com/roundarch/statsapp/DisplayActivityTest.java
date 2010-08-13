@@ -1,6 +1,7 @@
 package com.roundarch.statsapp;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
 
 /**
  * This is a simple framework for a test of an Application.  See

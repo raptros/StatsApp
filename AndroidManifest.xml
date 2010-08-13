@@ -14,9 +14,9 @@
         <service android:name="SetupService" android:label="@string/setup_service">
         </service>
         <service android:name="UpdaterService" android:label="@string/updater_service">
-            <!--<intent-filter>-->
-                <!--<action android:name="com.roundarch.statsapp.ACTION_UPDATE"/>-->
-            <!--</intent-filter>-->
+            <intent-filter>
+                <action android:name="com.roundarch.statsapp.ACTION_UPDATE"/>
+            </intent-filter>
         </service>
         <receiver android:name="AlarmReceiver" android:label="@string/alarm_receiver">
         </receiver>
