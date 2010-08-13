@@ -9,33 +9,27 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.util.Log;
+import java.util.List;
 
 import static com.roundarch.statsapp.APIConnection.MockConnection;
 import static com.roundarch.statsapp.ConnStoreTest.makeMockCMap;
 
 public class UpdaterServiceTest extends ServiceTestCase
 {
-    //not sure why I put this here.
-    public static class CompletionReportingConnection implements ServiceConnection
-    {
-        public boolean onServiceConnectedCompleted = false;
-        public boolean onServiceDisconnectedCompleted = false;
-
-        public void onServiceConnected(ComponentName name, IBinder service)
-        {
-
-            onServiceConnectedCompleted = true;
-        }
-
-        public void onServiceDisconnected(ComponentName name)
-        {
-
-            onServiceDisconnectedCompleted = true;
-        }
-    }
-
+    public static final String TAG = "com.roundarch.statsapp.UpdaterServiceTest";
     public UpdaterServiceTest() {
-        super(UpdaterService.class);
+        /* now, you might be asking yourself, why does this test use setupservice?
+         * well, actually, it doesn't really.  the issue is that updaterservice 
+         * relies on setupservice running. remember that updaterservice has only 
+         * one function, and only one way of being interacted with.
+         * setupservice is what causes updaterservice be run, and the effects of 
+         * updaterservice are on things accesed through setupservice. thus, to 
+         * test updaterservice, I have to run setupservice, defining the environemnt
+         * that the updaterservice will run in, and use setupservice to test the work
+         * of updaterservice. 
+         */
+        super(SetupService.class);
     }
     
     protected Context sys;
@@ -58,15 +52,44 @@ public class UpdaterServiceTest extends ServiceTestCase
         store.save();
 
     }
+    protected SetupService setup;
 
     public void testRunAnUpdate()
     {
-        //startService(new Intent(sys, UpdaterService.class));
+        List<APIConnection> conns;
+        MockConnection mock;
+        ServiceConnection mServiceConn = new ServiceConnection()
+        {
+            public void onServiceConnected(ComponentName className, IBinder service)
+            {
+                setup = ((SetupService.SetupBinder)service).getService();
+            }
+
+            public void onServiceDisconnected(ComponentName className)
+            {
+                setup = null;
+            }
+        };
+
+        //this resembles the way that setupservice should be run.
+        //start service, then bind to it only after it's been started.
         sys.startService(new Intent(sys, SetupService.class));
-        SystemClock.sleep(1000*2);
-        sys.startService(new Intent(sys, UpdaterService.class));
-        SystemClock.sleep(1000*2);
-        sys.startService(new Intent(sys, UpdaterService.class));
-        SystemClock.sleep(1000*2);
+        boolean bound = sys.bindService(new Intent(sys, SetupService.class), mServiceConn, sys.BIND_AUTO_CREATE);
+        assertTrue("could not bind to service", bound);
+        for (int count = 1; count < 4; count++)
+        {
+            SystemClock.sleep(1000*3);
+            conns = setup.connectionList();
+            for (APIConnection conn : conns)
+            {
+                mock = (MockConnection)conn;
+                String pt = "count " + count + " id " + mock.getId() + " name " + mock.getTestVal();
+                Log.d(TAG, pt);
+                assertEquals(pt, count, mock.getUpdateCount());
+            }
+            if (count < 3)
+                sys.startService(new Intent(sys, UpdaterService.class));
+        }
+        sys.unbindService(mServiceConn);
     }
 }
