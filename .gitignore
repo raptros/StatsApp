@@ -1,0 +1,13 @@
+/bin/*
+/libs/*
+
+*~
+.*.swp
+*/bin/*
+*/libs/*
+
+local.properties
+*/local.properties
+
+notes
+tags
