@@ -48,11 +48,17 @@ public abstract class APIConnection
             fields.put(kTESTING, testVal);
         }
 
-        public void doUpdate()
+        public boolean doUpdate()
         {
-            //do nothing at all.
+            //up the count.
             Log.d(TAG, "update " + getUpdateCount() + " for " + type + " number " + getId());
             setUpdateCount(updateCount + 1);
+            return true;
+        }
+
+        public String getType()
+        {
+            return type;
         }
 
     }
@@ -76,6 +82,7 @@ public abstract class APIConnection
     protected int id = -1;
     protected HashMap<String, Object> fields;
 
+
     public APIConnection(HashMap<String, Object> cMap)
     {
         fields = cMap;
@@ -83,7 +90,7 @@ public abstract class APIConnection
             id = (Integer)cMap.get(kID);
     }
 
-    public abstract void doUpdate();
+    public abstract boolean doUpdate();
 
     public int getId()
     {
@@ -100,4 +107,6 @@ public abstract class APIConnection
     {
         return fields;
     }
+
+    public abstract String getType();
 }

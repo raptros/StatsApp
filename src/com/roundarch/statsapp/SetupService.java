@@ -20,6 +20,7 @@ import android.app.PendingIntent;
 public class SetupService extends Service
 {
     public static final String TAG = "com.roundarch.statsapp.SetupService";
+    public static final String STARTED = "com.roundarch.statsapp.ACTION_SETUP_SERVICE_STARTED";
     public class SetupBinder extends Binder
     {
         SetupService getService()
@@ -156,6 +157,14 @@ public class SetupService extends Service
         return alarmTime;
     }
 
+    protected void setStartedAlarm(long millisFromNow)
+    {
+        Intent started = new Intent(STARTED);
+        alarmLauncher = PendingIntent.getBroadcast(this, 0, started, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (manager != null)
+            manager.set(AlarmManager.RTC, (long)System.currentTimeMillis() + millisFromNow, alarmLauncher);
+    }
+
     public void setAlarm(int seconds)
     {
         Log.d(TAG, "alarm set");
@@ -167,7 +176,7 @@ public class SetupService extends Service
         Intent triggerUpdate = new Intent(this, AlarmReceiver.class);
         alarmLauncher = PendingIntent.getBroadcast(this, 0, triggerUpdate, PendingIntent.FLAG_UPDATE_CURRENT);
         if (manager != null)
-            manager.setRepeating(AlarmManager.RTC, (long)System.currentTimeMillis() + 1, (long)seconds * 1000, alarmLauncher);
+            manager.setRepeating(AlarmManager.RTC, (long)System.currentTimeMillis() + 100, (long)seconds * 1000, alarmLauncher);
         alarmIsSet = true;
     }
 

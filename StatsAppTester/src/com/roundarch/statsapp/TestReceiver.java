@@ -10,8 +10,11 @@ public class TestReceiver extends BroadcastReceiver
     public static final String TAG="com.roundarch.statsapp.TestReceiver";
     @Override public void onReceive(Context context, Intent intent)
     {
+        if (intent.getAction().equals(UpdaterService.UPDATE_COMPLETE))
+            Log.d(TAG, "received update complete intent " + intent.getAction() + " " + describeExtras(intent));
+        else if (intent.getAction().equals(UpdaterService.ALL_UPDATES_COMPLETE))
+            Log.d(TAG, "received all updates complete" + intent.getAction());
 
-        Log.d(TAG, "received update complete intent " + intent.getAction() + " " + describeExtras(intent));
 
     }
 

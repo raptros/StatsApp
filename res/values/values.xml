@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--ids-->
+    <item type="id" name="kTypeTag"/>
+    <item type="id" name="kIDTag"/>
+    <!--default time-->
+    <integer name="def_update_time">3600</integer>
     <!--keys-->
     <string name="kUpdateTime">updateTime</string>
     <!--storage file names-->

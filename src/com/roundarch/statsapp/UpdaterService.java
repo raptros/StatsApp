@@ -13,6 +13,10 @@ import android.content.res.Resources;
 
 public class UpdaterService extends IntentService
 {
+    public static final String ALL_UPDATES_COMPLETE = "com.roundarch.statsapp.ACTION_ALL_UPDATES_COMPLETE";
+    public static final String UPDATE_COMPLETE = "com.roundarch.statsapp.ACTION_UPDATE_COMPLETE";
+    public static final String kSucceses = "successes";
+    public static final String kFailures = "failures";
     public static class SetupConnector implements ServiceConnection
     {
         UpdaterService parent;
@@ -27,15 +31,26 @@ public class UpdaterService extends IntentService
             //now that the service is bound as setup, get to work.
             //get the list of apiconnections, and loop over it
             List<APIConnection> connList = setup.connectionList();
+            int succeeds = 0, fails = 0;
             for (APIConnection conn : connList)
             {
                 //update the connection
-                conn.doUpdate();
-                //once it is updated, broadcast an intent with the fields.
-                Intent connUpdated = getIntentForConnection(conn);
-                parent.sendBroadcast(connUpdated); //something like this.
+                if (conn.doUpdate())
+                {
+                    succeeds++;
+                    //once it is updated, broadcast an intent with the fields.
+                    Intent connUpdated = getIntentForConnection(conn);
+                    parent.sendBroadcast(connUpdated); //something like this.
+                }
+                else
+                    fails++;
             }
             //finished.
+            Intent finished = new Intent(ALL_UPDATES_COMPLETE);
+            //put in some sucess/fail numbers?
+            finished.putExtra(kSucceses, succeeds);
+            finished.putExtra(kFailures, fails);
+            parent.sendBroadcast(finished);
         }
         public void onServiceDisconnected(ComponentName className)
         {
@@ -44,7 +59,7 @@ public class UpdaterService extends IntentService
 
         public static Intent getIntentForConnection(APIConnection conn)
         {
-            Intent updated = new Intent("com.roundarch.statsapp.ACTION_UPDATE_COMPLETE");
+            Intent updated = new Intent(UPDATE_COMPLETE);
             HashMap<String, Object> fields = conn.getFields();
             Object v;
             for (String k : fields.keySet())
@@ -74,7 +89,7 @@ public class UpdaterService extends IntentService
         //a notification that it is updating. TODO.
         Log.d(TAG, "update intent received");
         //bind SetupService to ask it for the api conns.
-        boolean bound = bindService(new Intent(this, SetupService.class), sConn, BIND_AUTO_CREATE);
+        boolean bound = bindService(new Intent(this, SetupService.class), sConn, 0);
         if (!bound)
             Log.d(TAG, "failed to bind service");
         else

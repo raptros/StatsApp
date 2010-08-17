@@ -12,6 +12,7 @@
         <receiver android:name="com.roundarch.statsapp.TestReceiver">
             <intent-filter>
                 <action android:name="com.roundarch.statsapp.ACTION_UPDATE_COMPLETE"/>
+                <action android:name="com.roundarch.statsapp.ACTION_ALL_UPDATES_COMPLETE"/>
             </intent-filter>
         </receiver>
     </application>
