@@ -105,6 +105,8 @@ public class ConnectionStore
 
     public APIConnection get(int id)
     {
+        if (id < 0)
+            return null;
         return index.get(id);
     }
 

@@ -12,6 +12,7 @@
     <string name="store_file">storefile</string>
     <!--activity names-->
     <string name="app_name">StatsApp</string>
+    <string name="add_activity">Add New Connection</string>
     <!--service names-->
     <string name="setup_service">SetupService</string>
     <string name="updater_service">UpdaterService</string>
@@ -20,4 +21,8 @@
     <!--Actions for intents-->
     <string name="launch_updater_service">com.roundarch.statsapp.ACTION_UPDATE</string>
     <string name="update_complete">com.roundarch.statsapp.ACTION_UPDATE_COMPLETE</string>
+    <!--menu strings-->
+    <string name="add_conn">Add Connection</string>
+    <string name="update_all">Refresh</string>
+    <string name="delete_conn">Delete Connection</string>
 </resources>

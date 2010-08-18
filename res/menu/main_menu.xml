@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/add_conn"
+        android:title="@string/add_conn"
+        />
+    <item android:id="@+id/update_all"
+        android:title="@string/update_all"
+        />
+    <!--add settings item here-->
+</menu>

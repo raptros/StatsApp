@@ -2,7 +2,13 @@ package com.roundarch.statsapp;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
+import android.view.View;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.ContextMenu;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.content.ServiceConnection;
@@ -19,9 +25,10 @@ public class DisplayActivity extends ListActivity
     public static final String TAG = "com.roundarch.statsapp.DisplayActivity";
     //TODO options menu ... 
     
+    public static final int reqADD = 0;
 
     public static class AdapterReceiver extends BroadcastReceiver
-    {
+    { 
         protected DisplayActivity parent;
         protected ConnectionAdapter adapter;
 
@@ -71,6 +78,7 @@ public class DisplayActivity extends ListActivity
         setListAdapter(adapter);
 
         receiver = new AdapterReceiver(this, adapter);
+        registerForContextMenu(getListView());
 
         Log.d(TAG, "calling startservice for setup");
         startService(new Intent(this, SetupService.class));
@@ -134,10 +142,77 @@ public class DisplayActivity extends ListActivity
 
     }
 
-    //use this to launch the settings activity or add connection activity or whatever.
-    /*@Override public boolean onOptionsItemSelected(MenuItem item)
+    @Override public boolean onCreateOptionsMenu(Menu menu)
     {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
         return true;
-    }*/
+    }
+
+    //use this to launch the settings activity or add connection activity or whatever.
+    @Override public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId())
+        {
+            case R.id.add_conn:
+                addConn();
+                return true;
+            case R.id.update_all:
+                updateAll();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    protected void updateAll()
+    {
+        startService(new Intent(UpdaterService.UPDATE));
+    }
+
+    protected void addConn()
+    {
+        startActivityForResult(new Intent(this, AddActivity.class), reqADD);
+    }
+
+    protected void doDelete(int position)
+    {
+        Intent deleter = new Intent(SetupService.DELETE);
+        int id = ((APIConnection)adapter.getItem(position)).getId();
+        deleter.putExtra(APIConnection.kID, id);
+        adapter.deleteItem(position);
+        startService(deleter);
+    }
+    
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == reqADD && resultCode == RESULT_OK)
+        {
+            Intent createConn = new Intent(data);
+            createConn.setAction(SetupService.CREATE);
+            startService(createConn);
+        }
+    }
+    
+    @Override public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.conn_menu, menu);
+    }
+
+    @Override public boolean onContextItemSelected(MenuItem item)
+    {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        switch (item.getItemId()) 
+        {
+            case R.id.delete:
+                doDelete(info.position);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+    
 
 }

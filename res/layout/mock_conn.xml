@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+    <TextView android:text="ID"
+        android:id="@+id/id_prompt"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
+    <TextView android:text="Count"
+        android:id="@+id/count_prompt"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" />
+    <TextView android:id="@+id/val_id"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/id_prompt"
+        android:layout_alignLeft="@id/id_prompt"/>
+    <TextView android:id="@+id/val_count"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/count_prompt"
+        android:layout_alignRight="@id/count_prompt"/>
+</RelativeLayout>
+

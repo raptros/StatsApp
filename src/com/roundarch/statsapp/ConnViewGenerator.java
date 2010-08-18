@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 
 import static com.roundarch.statsapp.APIConnection.MockConnection;
 import com.roundarch.statsapp.connections.TwitterConnection;
@@ -40,14 +42,14 @@ public class ConnViewGenerator
 
     protected static View createMockConnectionView(Context context, MockConnection conn)
     {
-        LinearLayout lin = new LinearLayout(context);
-        TextView idLabel = new TextView(context);
-        idLabel.setText("id: " + conn.getId());
-        lin.addView(idLabel, 0);
-        TextView countLabel = new TextView(context);
-        countLabel.setText("count: " + conn.getUpdateCount());
-        lin.addView(countLabel, 1);
-        return lin;
+        //load the ViewGroup from a layout resource.
+        LayoutInflater inflater = LayoutInflater.from(context);
+        ViewGroup root = (ViewGroup)inflater.inflate(R.layout.mock_conn, null);
+        TextView idVal = (TextView)root.findViewById(R.id.val_id);
+        idVal.setText("" + conn.getId());
+        TextView countVal = (TextView)root.findViewById(R.id.val_count);
+        countVal.setText("" + conn.getUpdateCount());
+        return root;
     }
 
     protected static void updateMockConnectionView(Bundle update, LinearLayout toUpdate)
@@ -59,8 +61,15 @@ public class ConnViewGenerator
 
     protected static View createTwitterConnectionView(Context context, TwitterConnection conn)
     {
-        LinearLayout lin = new LinearLayout(context);
-        TextView countLabel = new TextView(context);
-        return lin;
+        //load the ViewGroup from a layout resource.
+        LayoutInflater inflater = LayoutInflater.from(context);
+        ViewGroup root = (ViewGroup)inflater.inflate(R.layout.twitter_conn, null);
+        TextView username = (TextView)root.findViewById(R.id.username);
+        username.setText(conn.getUser());
+        TextView update = (TextView)root.findViewById(R.id.update);
+        update.setText(conn.getLastUpdate());
+        TextView followers = (TextView)root.findViewById(R.id.followers);
+        followers.setText("" + conn.getFollowersCount());
+        return root;
     }
 }

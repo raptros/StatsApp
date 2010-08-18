@@ -12,7 +12,6 @@ import android.content.Context;
 import com.roundarch.statsapp.connections.TwitterConnection;
 import static com.roundarch.statsapp.APIConnection.MockConnection;
 
-//TODO implement this thing!
 public class ConnectionAdapter implements ListAdapter
 {
     protected HashMap<String, Integer> typeIds;
@@ -100,6 +99,12 @@ public class ConnectionAdapter implements ListAdapter
     public void unregisterDataSetObserver(DataSetObserver observer)
     {
         observers.remove(observer);
+    }
+
+    public void deleteItem(int position)
+    {
+        conns.remove(position);
+        change();
     }
 
     protected void change()

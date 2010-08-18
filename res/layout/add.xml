@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    >
+    <Spinner android:id="@+id/type_chooser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        /> 
+    <!--twitter options group - invisible unless twitter is connection type chosen.-->
+    <!--any option group should be aligned to bottom of type_chooser-->
+    <EditText android:id="@+id/twitter_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/type_chooser"
+        android:singleLine="true"
+        />
+
+            
+    <!--Ok and Cancel buttons, basically.-->
+    <TableLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:stretchColumns="*"
+        >
+        <TableRow>
+            <Button android:id="@+id/cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Cancel"
+                />
+            <Button android:id="@+id/add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Add"
+                />
+        </TableRow>
+    </TableLayout>
+</RelativeLayout>
+

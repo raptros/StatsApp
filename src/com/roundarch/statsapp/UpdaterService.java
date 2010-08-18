@@ -13,6 +13,7 @@ import android.content.res.Resources;
 
 public class UpdaterService extends IntentService
 {
+    public static final String UPDATE = "com.roundarch.statsapp.ACTION_UPDATE";
     public static final String ALL_UPDATES_COMPLETE = "com.roundarch.statsapp.ACTION_ALL_UPDATES_COMPLETE";
     public static final String UPDATE_COMPLETE = "com.roundarch.statsapp.ACTION_UPDATE_COMPLETE";
     public static final String kSucceses = "successes";

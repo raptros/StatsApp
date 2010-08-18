@@ -11,7 +11,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="AddActivity" 
+            android_label="@string/add_activity"/>
         <service android:name="SetupService" android:label="@string/setup_service">
+            <intent-filter>
+                <action android:name="com.roundarch.statsapp.ACTION_SETUP_CREATE_CONN"/>
+                <action android:name="com.roundarch.statsapp.ACTION_SETUP_DELETE_CONN"/>
+            </intent-filter>
         </service>
         <service android:name="UpdaterService" android:label="@string/updater_service">
             <intent-filter>
